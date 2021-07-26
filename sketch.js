@@ -1,9 +1,12 @@
 function setup(){
     createCanvas(640, 480);
+    perdu = false;
     posX = Math.floor(Math.random()* 640);
     posY = Math.floor(Math.random()* 480);
-    stroke('black');
-    obstacle()
+    posVirus = [];
+    virus(posVirus);
+    timeRemain = millis();
+    text('Milliseconds \nrunning: \n' + timeRemain, 5, 40);
 }
 
 function updatePos(){
@@ -48,18 +51,62 @@ function strokeRed(){
         stroke('black');
     }
 }
-function obstacle(){
-    ObstaclePosX = Math.floor(Math.random()* 640);
-    ObstaclePosY = Math.floor(Math.random()* 480);
-    ellipse(ObstaclePosX, ObstaclePosY, 10, 10);
+function virus(arg){
+    for (i = 0; i < 20; i++){
+        ObstaclePosX = Math.floor(Math.random()* 640);
+        ObstaclePosY = Math.floor(Math.random()* 480);
+        arg.push(ObstaclePosX, ObstaclePosY);
+    }
+}
+function createVirus(arg){
+    for (i = 0; i < (arg.length / 2); i++){
+        let f = i+1;
+        fill('red');
+        ellipse(arg[i], arg[f], 10, 10);
+    }
+}
+
+function moveVirus(arg){
+    for (i = 0; i < (arg.length / 2); i++){
+        let f = i+1;
+        arg[i] += 1;
+        arg[f] -= 1;
+    }
+}
+function distanceE(arg){
+    for (i = 0; i < (arg.length / 2); i++){
+        let f = i+1;
+        distance = dist(posX, posY, arg[i], arg[f]);
+        console.log(distance);
+        if (distance < 25){
+            perdu = true;
+        }
+    }
+}
+function gameLose(){
+    if (perdu  == true){
+        alert("perdu");
+    }
+}
+function createEllipse(){
+    fill('white');
+    ellipse(posX,posY,50,50);
+}
+
+function timeOut(){
+    if (timeRemain >= 60000){
+        alert('perdu');
+    }
 }
 function draw(){
     background(220);
+    gameLose();
     updatePos();
     testOutOfScreen();
-    ellipse(posX,posY,50,50);
-    numberVirus = 20;
-    for (i = 0; i < numberVirus; i++){
-        obstacle();
-    }
+    createVirus(posVirus);
+    moveVirus(posVirus);
+    distanceE(posVirus);
+    createEllipse();
+    fill("white");
+    timeOut()
 }
