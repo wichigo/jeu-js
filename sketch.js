@@ -5,8 +5,10 @@ function setup(){
     posY = Math.floor(Math.random()* 480);
     posVirus = [];
     virus(posVirus);
+    vie = 1;
     timeRemain = millis();
     text('Milliseconds \nrunning: \n' + timeRemain, 5, 40);
+    drawState = true;
 }
 
 function updatePos(){
@@ -52,7 +54,7 @@ function strokeRed(){
     }
 }
 function virus(arg){
-    for (i = 0; i < 20; i++){
+    for (i = 0; i < 40; i++){
         ObstaclePosX = Math.floor(Math.random()* 640);
         ObstaclePosY = Math.floor(Math.random()* 480);
         arg.push(ObstaclePosX, ObstaclePosY);
@@ -60,7 +62,7 @@ function virus(arg){
 }
 function createVirus(arg){
     for (i = 0; i < (arg.length / 2); i++){
-        let f = i+1;
+        let f = i*2;
         fill('red');
         ellipse(arg[i], arg[f], 10, 10);
     }
@@ -68,16 +70,41 @@ function createVirus(arg){
 
 function moveVirus(arg){
     for (i = 0; i < (arg.length / 2); i++){
-        let f = i+1;
-        arg[i] += 1;
-        arg[f] -= 1;
+        let f = i*2;
+        let inverse = false;
+        if (Math.random() * 10 <= 5){
+            if (inverse){
+                arg[i] += 1;
+            }
+            else{
+                arg[i] -= 1
+            }
+        }
+        else {
+            if (inverse){
+                arg[f] += 1;
+            }
+            else{
+                arg[f] -= 1;
+            }
+        }
+        if (arg[i] > 635){
+            while (arg[i] > 5){
+                inverse = true;
+            }
+        }
+        else if (arg[i] < 5){
+            while (arg[i] < 635){
+                arg[i] +=1
+            }
+        }
+        
     }
 }
 function distanceE(arg){
     for (i = 0; i < (arg.length / 2); i++){
-        let f = i+1;
+        let f = i*2;
         distance = dist(posX, posY, arg[i], arg[f]);
-        console.log(distance);
         if (distance < 25){
             perdu = true;
         }
@@ -85,8 +112,22 @@ function distanceE(arg){
 }
 function gameLose(){
     if (perdu  == true){
-        alert("perdu");
+        if (vie > 0){
+            vie--
+            alert('vie : 0');
+            perdu = false;
+            posX = Math.floor(Math.random()* 640);
+            posY = Math.floor(Math.random()* 640);
+
+        }
+        else {
+            alert('perdu fdp');
+            vie = 1;
+            setup();
+        }
     }
+    
+    
 }
 function createEllipse(){
     fill('white');
@@ -99,14 +140,12 @@ function timeOut(){
     }
 }
 function draw(){
-    background(220);
-    gameLose();
-    updatePos();
-    testOutOfScreen();
-    createVirus(posVirus);
-    moveVirus(posVirus);
-    distanceE(posVirus);
-    createEllipse();
-    fill("white");
-    timeOut()
+        background(220);
+        gameLose();
+        updatePos();
+        testOutOfScreen();
+        createVirus(posVirus);
+        moveVirus(posVirus);
+        distanceE(posVirus);
+        createEllipse();
 }
