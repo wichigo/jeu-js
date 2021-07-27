@@ -21,22 +21,19 @@ function randomNum(){
 }
 function updatePos(){
     if (keyIsDown(RIGHT_ARROW)){
-        posX += 2;
+        posX += 5;
     }
-    else if(keyIsDown(LEFT_ARROW)){
-        posX -= 2;
+    if(keyIsDown(LEFT_ARROW)){
+        posX -= 5;
     }
-    else if(keyIsDown(UP_ARROW)){
-        posY -= 2;
+    if(keyIsDown(UP_ARROW)){
+        posY -= 5;
     }
-    else if(keyIsDown(DOWN_ARROW)){
-        posY += 2;
+    if(keyIsDown(DOWN_ARROW)){
+        posY += 5;
     }
-    else{
-        console.log('Rick');
-    }
-    return posX, posY;
 }
+
 
 function testOutOfScreen(){
     if (posX > 615 || posX < 25){
@@ -62,7 +59,7 @@ function strokeRed(){
     }
 }
 function virus(arg){
-    for (i = 0; i < 40; i++){
+    for (i = 0; i < 30; i++){
         ObstaclePosX = Math.floor(Math.random()* 640);
         ObstaclePosY = Math.floor(Math.random()* 480);
         arg.push(ObstaclePosX, ObstaclePosY);
